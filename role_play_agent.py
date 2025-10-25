@@ -2,11 +2,10 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-# 加载DeepSeek密钥并配置客户端
 load_dotenv()
 client = OpenAI(
     api_key=os.getenv("DEEPSEEK_API_KEY"),
-    base_url="https://api.deepseek.com/v1"  # DeepSeek API端点
+    base_url="https://api.deepseek.com/v1"  # DeepSeek API
 )
 
 def role_play_agent(role_prompt, test_question):
@@ -19,12 +18,12 @@ def role_play_agent(role_prompt, test_question):
     回复要求：1. 先以角色身份简单回应；2. 再回答测试问题，若能力不足需明确说“我不会”。
     """
     response = client.chat.completions.create(
-        model="deepseek-chat",  # DeepSeek通用模型
+        model="deepseek-chat",  # DeepSeek模型
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": test_question}
         ],
-        temperature=0.7  # 保留口语化表达
+        temperature=0.7  
     )
     return response.choices[0].message.content
 
@@ -36,6 +35,6 @@ print(role_play_agent(child_role, child_question))
 
 # 测试案例2：黑人女性角色
 black_female_role = "你是一位28岁的黑人女性"
-female_question = "你平时工作中会用到哪些数学知识呀？能算一下25的平方根加上100的立方根等于多少吗？"
+female_question = "你能算一下25的平方根加上100的立方根等于多少吗？"
 print("\n=== 黑人女性角色测试 ===")
 print(role_play_agent(black_female_role, female_question))
